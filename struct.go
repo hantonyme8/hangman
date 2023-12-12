@@ -1,0 +1,51 @@
+package hangman
+
+import (
+	"encoding/json"
+	"log"
+)
+
+type HangManData struct {
+	Word        []string // Word composed of '_', ex: H_ll_
+	ToFind      []string // Final word chosen by the program at the beginning. It is the word to find
+	UsedLetter  []string
+	Attempts    int // Number of attempts left
+	Hangman     int
+	Message     string
+	WrongLetter bool
+	End         bool
+}
+
+func Stop(file string, mot, hidden, usedletter []string, essai, hangman int) {
+	/*
+		Entrée : string, liste de string, entiers
+		Sortie : rien
+		Objectif : sauvegarde
+	*/
+	dico, err := json.Marshal(HangManData{Word: hidden, ToFind: mot, Attempts: essai, Hangman: hangman, UsedLetter: usedletter})
+	if err != nil {
+		log.Fatal(err)
+	}
+	WriteInFile(file+"_SAVE.txt", string(dico))
+}
+
+func CreateNewGame(path string) HangManData {
+	/*
+		Entrée : string
+		Sortie : struct
+		Objectif : créer une nouvelle partie
+	*/
+	mot := ToUpper(StringToSlice(RandWord(path)))
+	hidden := PrintHidden(mot)
+	contenu := SelectN(mot)
+	word := PrintLetter(contenu, mot, hidden)
+	dico := HangManData{Word: word, ToFind: mot, Attempts: -1, Hangman: -1, UsedLetter: []string{}}
+	return dico
+}
+
+func InitSaveGame(path string) HangManData {
+	var hangman HangManData
+	data := OpenWords(path)[0]
+	json.Unmarshal([]byte(data), &hangman)
+	return hangman
+}

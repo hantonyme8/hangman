@@ -1,0 +1,1 @@
+{"Word":["_"," ","_"," ","R"," ","_"," ","_"],"ToFind":["H","E","R","B","E"],"UsedLetter":[""," ","A"," "],"Attempts":0,"Hangman":0,"Message":"","WrongLetter":false,"End":false}
